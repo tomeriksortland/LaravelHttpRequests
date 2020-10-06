@@ -18,8 +18,8 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('products.index') }}">Products</a>
                   </li>
-                  <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('orders.index') }}">Orders</a>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="{{ route('orders.index') }}">Orders</a>
                   </li>
               </ul>
         </div>
@@ -40,13 +40,13 @@
               </tr>
             </thead>
             <tbody>             
-              @foreach($response as $product)
+              @foreach($response as $order)
               <tr class="table-dark">
-                <td>{{ $product['id'] }}</td>
-                <td>{{ $product['total'] }}</td>
-                <td>{{ $product['currency'] }}</td>
-                <td>{{ $product['status'] }}</td>
-                <td>{{ $product['customer_id'] }}</td>
+                <td>{{ $order['id'] }}</td>
+                <td>{{ $order['total'] }}</td>
+                <td>{{ $order['currency'] }}</td>
+                <td>{{ $order['status'] }}</td>
+                <td>{{ $order['customer_id'] }}</td>
               </tr>
               @endforeach
             </tbody>
