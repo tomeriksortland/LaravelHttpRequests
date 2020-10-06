@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         
-        Commands\GetCustomers::class
+        Commands\GetCustomers::class,
+        Commands\GetOrders::class
 
     ];
 
@@ -26,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+         $schedule->command(GetOrders::class)->everyMinute();
     }
 
     /**
