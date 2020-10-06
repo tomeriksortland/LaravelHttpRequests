@@ -47,11 +47,11 @@ class GetOrders extends Command
 
 
         foreach ($request as $orders) {
-            $order = new Order();
-            $order->id = $orders['id'];
-            $order->total_price = $orders['total'];
-            $order->tax_amount = $orders['total_tax'];
-            $order->save();
+            Order::firstOrCreate([
+                'id' => $orders['id'],
+                'total_price' => $orders['total'],
+                'tax_amount' => $orders['total_tax']
+            ]);
         }
         
          $this->info('You have now retrieved and stored all the orders in your database successfully.');

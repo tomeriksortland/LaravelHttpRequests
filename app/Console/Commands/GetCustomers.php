@@ -32,13 +32,13 @@ class GetCustomers extends Command
 
 
         foreach ($request as $customers) {
-            $customer = new Customer();
-            $customer->id = $customers['id'];
-            $customer->first_name = $customers['first_name'];
-            $customer->last_name = $customers['last_name'];
-            $customer->email = $customers['email'];
-            $customer->phone = $customers['billing']['phone'];
-            $customer->save();
+            Customer::firstOrCreate([
+                'id' => $customers['id'],
+                'first_name' => $customers['first_name'],
+                'last_name' => $customers['last_name'],
+                'email' => $customers['email'],
+                'phone' => $customers['billing']['phone']
+            ]);
         }
         
          $this->info('You have now retrieved and stored all the customers in your database successfully.');
