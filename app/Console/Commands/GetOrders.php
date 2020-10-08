@@ -108,10 +108,9 @@ class GetOrders extends Command
                 ]
             ]);
 
-            $pageBody = json_decode($page->getBody());
-
-            $collectionOfOrders = $collectionOfOrders->merge($pageBody);
+            $collectionOfOrders = $collectionOfOrders->merge(json_decode($page->getBody()));
         }
+
         return $collectionOfOrders;
     }
 
