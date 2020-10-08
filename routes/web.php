@@ -4,7 +4,7 @@ use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\WooPaginationController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +22,3 @@ Route::resource('/', HomeController::class);
 Route::resource('/products', ProductsController::class);
 Route::resource('/orders', OrdersController::class);
 Route::resource('/customers', CustomersController::class);
-Route::resource('/pagination', WooPaginationController::class);

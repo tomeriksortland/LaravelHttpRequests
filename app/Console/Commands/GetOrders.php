@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\Order;
+use GuzzleHttp\Client;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 class GetOrders extends Command
@@ -41,21 +43,89 @@ class GetOrders extends Command
     {
         $key = env('WOO_API_KEY');
         $secret = env('WOO_API_SECRET');
-        $url = 'https://aksel.frb.io/wp-json/wc/v3/orders';
+        $url = 'https://aksel.frb.io/wp-json/wc/v3/';
+        $endpoint = 'orders';
+        $collectionOfOrders = new Collection();
 
-        $request = Http::withBasicAuth($key, $secret)->get($url)->json();
+
+        $client = new Client([
+            'base_uri' => $url,
+        ]);
+
+        $response = $client->get($endpoint, [
+            'auth' => [
+                $key,
+                $secret
+            ],
+            'query' => [
+                'per_page' => 2,
+            ]
+        ]);
 
 
-        foreach ($request as $orders) {
+        $totalAmountOfPages = $this->getTotalAmountOfPages($response);
+        $addOrdersToCollection = $this->addAllOrdersToCollection(
+            $client,
+            $totalAmountOfPages,
+            $collectionOfOrders,
+            $endpoint,
+            $key,
+            $secret
+        );
+        $this->addCollectionOfOrdersToLocalDB($addOrdersToCollection);
+
+        $this->info('You have now retrieved and stored all the orders in your database successfully.');
+    }
+
+
+
+    static function getTotalAmountOfPages($response)
+    {
+        $headers = $response->getHeaders();
+        foreach ($headers as $name => $header) {
+            if ($name == 'X-WP-TotalPages') {
+                foreach ($header as $value) {
+                    $totalPages = $value;
+                }
+            }
+        }
+        return $totalPages;
+    }
+
+
+    static function addAllOrdersToCollection($client, $totalAmountOfPages, $collectionOfOrders, $endpoint, $key, $secret)
+    {
+
+        for ($i = 1; $i <= $totalAmountOfPages; $i++) {
+            $page = $client->get($endpoint, [
+                'auth' => [
+                    $key,
+                    $secret
+                ],
+                'query' => [
+                    'per_page' => 2,
+                    'page' => $i,
+                ]
+            ]);
+
+            $pageBody = json_decode($page->getBody());
+
+            $collectionOfOrders = $collectionOfOrders->merge($pageBody);
+        }
+        return $collectionOfOrders;
+    }
+
+
+    static function addCollectionOfOrdersToLocalDB($collectionOfOrders)
+    {
+        foreach ($collectionOfOrders as $order) {
             Order::firstOrCreate([
-                'id' => $orders['id'],
-                'total_price' => $orders['total'],
-                'tax_amount' => $orders['total_tax'],
-                'created_at' => $orders['date_created_gmt'],
-                'updated_at' => $orders['date_modified_gmt']
+                'id' => $order->id,
+                'total_price' => $order->total_tax,
+                'tax_amount' => $order->total_tax,
+                'created_at' => $order->date_created_gmt,
+                'updated_at' => $order->date_modified_gmt
             ]);
         }
-        
-         $this->info('You have now retrieved and stored all the orders in your database successfully.');
     }
 }
