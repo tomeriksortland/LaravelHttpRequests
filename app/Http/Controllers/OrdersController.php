@@ -13,8 +13,8 @@ class OrdersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
-        $orders = Order::latest()->simplePaginate(7);
+    {
+        $orders = Order::latest()->simplePaginate(10);
 
         return view('order.index', ['orders' => $orders]);
     }

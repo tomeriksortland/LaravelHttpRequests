@@ -120,7 +120,7 @@ class GetOrders extends Command
         foreach ($collectionOfOrders as $order) {
             Order::firstOrCreate([
                 'id' => $order->id,
-                'total_price' => $order->total_tax,
+                'total_price' => $order->total,
                 'tax_amount' => $order->total_tax,
                 'created_at' => $order->date_created_gmt,
                 'updated_at' => $order->date_modified_gmt
