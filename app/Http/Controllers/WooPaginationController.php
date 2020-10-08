@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
 use Illuminate\Http\Request;
 
-class OrdersController extends Controller
+class WooPaginationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,10 +12,49 @@ class OrdersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
-        $orders = Order::latest()->simplePaginate(7);
+    {
+        $key = env('WOO_API_KEY');
+        $secret = env('WOO_API_SECRET');
+        $url = 'https://aksel.frb.io/wp-json/wc/v3/';
+        $endpoint = 'customers';
+        
+        $response = Http::withBasicAuth($key, $secret)->get($url);
 
-        return view('order.index', ['orders' => $orders]);
+        $client = new Client([
+            'base_uri' => $url,
+        ]);
+
+        $response = $client->get($endpoint, [
+            'auth' => [
+                $key,
+                $secret
+            ],
+            'query' => [
+                'per_page' => 2,
+            ]
+        ]);
+
+        $headers = $response->getHeaders();
+        foreach ($headers as $name => $header) {
+            if($name == 'X-WP-TotalPages') {
+                foreach ($header as $value) {
+                    $totalPages = $value;
+                }
+            }
+        }
+
+    for ($i=1; $i <= $totalPages; $i++) { 
+        $orders = $client->get( $endpoint, [
+            'auth' => [
+                $key,
+                $secret
+            ],
+            'query' => [
+                'per_page' => 2,
+                'page' => $i,
+            ]
+            ]);
+    }
     }
 
     /**

@@ -37,21 +37,24 @@
                 <th scope="col">Currency</th>
                 <th scope="col">Status</th>
                 <th scope="col">Customer ID</th>
+                <th scope="col">Date created</th>
               </tr>
             </thead>
             <tbody>             
-              @foreach($response as $order)
+              @foreach($orders as $order)
               <tr class="table-dark">
                 <td>{{ $order['id'] }}</td>
                 <td>{{ $order['total'] }}</td>
                 <td>{{ $order['currency'] }}</td>
                 <td>{{ $order['status'] }}</td>
                 <td>{{ $order['customer_id'] }}</td>
+                <td>{{ $order['created_at'] }}</td>
               </tr>
               @endforeach
             </tbody>
           </table> 
         </div>
+        {{ $orders->links() }}
     </div>
 </body>
 </html>

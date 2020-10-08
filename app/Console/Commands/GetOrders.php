@@ -50,7 +50,9 @@ class GetOrders extends Command
             Order::firstOrCreate([
                 'id' => $orders['id'],
                 'total_price' => $orders['total'],
-                'tax_amount' => $orders['total_tax']
+                'tax_amount' => $orders['total_tax'],
+                'created_at' => $orders['date_created_gmt'],
+                'updated_at' => $orders['date_modified_gmt']
             ]);
         }
         

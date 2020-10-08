@@ -14,6 +14,9 @@ class ProductsController extends Controller
      */
     public function index()
     {
+        // KAN FILTRERE ETTER SØK: https://aksel.frb.io/wp-json/wc/v3/orders?after=2020-10-01 14:04:00
+        // Her søker du i APIet og finner alle ordre som er lagt til etter 2020-10-01 14:04:00
+        
         $key = env('WOO_API_KEY');
         $secret = env('WOO_API_SECRET');
         $url = 'https://aksel.frb.io/wp-json/wc/v3/products';
