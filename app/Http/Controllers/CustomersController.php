@@ -16,8 +16,8 @@ class CustomersController extends Controller
     {
         $key = env('WOO_API_KEY');
         $secret = env('WOO_API_SECRET');
-        $url = 'https://aksel.frb.io/wp-json/wc/v3/customers';
-        
+        $url = 'https://aksel.frb.io/wp-json/wc/v3/customers?per_page=100';
+
         $response = Http::withBasicAuth($key, $secret)->get($url);
 
         return view('customer.index', ['response' => $response->json()]);
