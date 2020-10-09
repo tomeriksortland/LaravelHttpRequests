@@ -22,3 +22,4 @@ Route::resource('/', HomeController::class);
 Route::resource('/products', ProductsController::class);
 Route::resource('/orders', OrdersController::class);
 Route::resource('/customers', CustomersController::class);
+Route::resource('/test', TestController::class);

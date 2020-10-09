@@ -1,45 +1,15 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Http\Controllers;
 
 use App\Models\Order;
-use GuzzleHttp\Client;
-use Illuminate\Console\Command;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
-class GetOrders extends Command
+class TestController extends Controller
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'get:orders';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Retrieves order data from woocommerce store and stores relevant data in the database';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-    public function handle()
+    public function index()
     {
         $ApiKey = env('WOO_API_KEY');
         $ApiSecret = env('WOO_API_SECRET');
